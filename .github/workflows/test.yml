@@ -31,13 +31,6 @@ jobs:
       with:
         name: test-report
         path: target/site/surefire-report.html
-
-    - name: Generate coverage report
-      run: mvn -B jacoco:report
-
-    - name: Upload coverage to Codecov
-      uses: codecov/codecov-action@v2
-
   # docker:
   #   runs-on: ubuntu-latest
   #   needs: build

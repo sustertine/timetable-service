@@ -9,6 +9,7 @@ import com.suster.timetableservice.timetable.dto.TimetableRequestDto;
 import com.suster.timetableservice.timetable.dto.TimetableResponseDto;
 import com.suster.timetableservice.timetable.vao.Timetable;
 import com.suster.timetableservice.timetable.vao.TimetableEntry;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -23,6 +24,7 @@ public class TimetableService {
     private final TimetableEntryPreconditionService timetableEntryPreconditionService;
     private final ModelMapper modelMapper;
 
+    @Transactional
     public Long create(TimetableRequestDto timetableRequestDto) {
         Timetable timetable = modelMapper.map(timetableRequestDto, Timetable.class);
         return timetableRepository.save(timetable).getId();
@@ -50,6 +52,7 @@ public class TimetableService {
                 .toList();
     }
 
+    @Transactional
     public void update(Long id, TimetableRequestDto timetableRequestDto) {
         Timetable timetable = timetableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable not found with id: " + id));
@@ -61,6 +64,7 @@ public class TimetableService {
         timetableRepository.save(timetable);
     }
 
+    @Transactional
     public void delete(Long id) {
         Timetable timetable = timetableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable not found with id: " + id));
@@ -68,6 +72,7 @@ public class TimetableService {
         timetableRepository.delete(timetable);
     }
 
+    @Transactional
     public void addEntry(Long id, TimetableEntryRequestDto timetableEntryRequestDto) {
         timetableEntryPreconditionService.validate(timetableEntryRequestDto);
 
@@ -84,6 +89,7 @@ public class TimetableService {
         timetableRepository.save(timetable);
     }
 
+    @Transactional
     public void deleteEntry(Long id, Long entryId) {
         Timetable timetable = timetableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable not found with id: " + id));

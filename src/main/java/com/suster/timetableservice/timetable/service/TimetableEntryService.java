@@ -5,6 +5,7 @@ import com.suster.timetableservice.timetable.dao.TimetableEntryRepository;
 import com.suster.timetableservice.timetable.dto.TimetableEntryRequestDto;
 import com.suster.timetableservice.timetable.dto.TimetableEntryResponseDto;
 import com.suster.timetableservice.timetable.vao.TimetableEntry;
+import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
@@ -24,6 +25,7 @@ public class TimetableEntryService {
         );
     }
 
+    @Transactional
     public void update(Long id, TimetableEntryRequestDto timetableEntryRequestDto) {
         timetableEntryPreconditionService.validate(timetableEntryRequestDto);
 

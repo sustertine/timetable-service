@@ -35,11 +35,11 @@ class TimetableEntryControllerTest {
     @Autowired
     private MockMvc mockMvc;
 
-    @MockBean
-    private TimetableEntryService timetableEntryService;
-
     @Autowired
     private ObjectMapper objectMapper;
+
+    @MockBean
+    private TimetableEntryService timetableEntryService;
 
     private TimetableEntryResponseDto timetableEntryResponseDto;
     private TimetableEntryRequestDto timetableEntryRequestDto;

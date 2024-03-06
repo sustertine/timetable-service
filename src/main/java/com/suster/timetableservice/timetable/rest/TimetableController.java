@@ -15,7 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/timetables")
+@RequestMapping("/api/timetables")
 @Tag(name = "Timetable controller", description = "API for timetable operations")
 public class TimetableController {
 

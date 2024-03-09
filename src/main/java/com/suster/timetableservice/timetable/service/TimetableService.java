@@ -11,11 +11,13 @@ import com.suster.timetableservice.timetable.vao.Timetable;
 import com.suster.timetableservice.timetable.vao.TimetableEntry;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
 import org.modelmapper.ModelMapper;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 
+@Slf4j
 @Service
 @RequiredArgsConstructor
 public class TimetableService {
@@ -27,10 +29,12 @@ public class TimetableService {
     @Transactional
     public Long create(TimetableRequestDto timetableRequestDto) {
         Timetable timetable = modelMapper.map(timetableRequestDto, Timetable.class);
+        log.info("Creating new timetable: {}", timetable);
         return timetableRepository.save(timetable).getId();
     }
 
     public List<TimetableResponseDto> findAll() {
+        log.info("Fetching all timetables");
         return timetableRepository.findAll().stream()
                 .map(timetable -> modelMapper.map(timetable, TimetableResponseDto.class))
                 .toList();
@@ -40,12 +44,16 @@ public class TimetableService {
         Timetable timetable = timetableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable not found with id: " + id));
 
+        log.info("Fetching timetable by id: {}", id);
+
         return modelMapper.map(timetable, TimetableResponseDto.class);
     }
 
     public List<TimetableEntryResponseDto> findEntriesById(Long id) {
         Timetable timetable = timetableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable not found with id: " + id));
+
+        log.info("Fetching entries for timetable with id: {}", id);
 
         return timetable.getEntries().stream()
                 .map(entry -> modelMapper.map(entry, TimetableEntryResponseDto.class))
@@ -56,6 +64,8 @@ public class TimetableService {
     public void update(Long id, TimetableRequestDto timetableRequestDto) {
         Timetable timetable = timetableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable not found with id: " + id));
+
+        log.info("Updating timetable with id: {}, dto: {}", id, timetableRequestDto);
 
         timetable.setTitle(timetableRequestDto.getTitle());
         timetable.setDescription(timetableRequestDto.getDescription());
@@ -69,6 +79,8 @@ public class TimetableService {
         Timetable timetable = timetableRepository.findById(id)
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable not found with id: " + id));
 
+        log.info("Deleting timetable with id: {}", id);
+
         timetableRepository.delete(timetable);
     }
 
@@ -81,8 +93,11 @@ public class TimetableService {
 
         if (timetableEntryRequestDto.getRecurring() != null && timetableEntryRequestDto.getRecurring()) {
             // TODO: Implement recurring entries
+            log.error("Recurring entries are not supported yet. dto: {}", timetableEntryRequestDto);
             throw new UnsupportedOperationException("Recurring entries are not supported yet");
         }
+
+        log.info("Adding entry to timetable with id: {}, entry: {}", id, timetableEntryRequestDto);
 
         TimetableEntry entry = timetableEntryRepository.save(modelMapper.map(timetableEntryRequestDto, TimetableEntry.class));
         timetable.getEntries().add(entry);
@@ -98,6 +113,8 @@ public class TimetableService {
                 .filter(e -> e.getId().equals(entryId))
                 .findFirst()
                 .orElseThrow(() -> new ResourceNotFoundException("Timetable entry not found with id: " + entryId));
+
+        log.info("Deleting entry from timetable with id: {}, entry id: {}", id, entryId);
 
         timetable.getEntries().remove(entry);
         timetableEntryRepository.delete(entry);

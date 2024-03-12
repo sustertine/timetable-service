@@ -13,7 +13,7 @@ services:
     volumes:
       - timetable-service:/var/lib/postgresql/data
 
-  spring-app:
+  timetable-service:
     build:
       context: .
       dockerfile: Dockerfile

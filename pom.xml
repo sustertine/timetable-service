@@ -80,6 +80,7 @@
                             <artifactId>lombok</artifactId>
                         </exclude>
                     </excludes>
+                    <mainClass>com.suster.timetableservice.TimetableServiceApplication</mainClass>
                 </configuration>
             </plugin>
         </plugins>
